@@ -21,7 +21,6 @@ public class GraphImplementation implements Graph {
 
     public List<Integer> topologicalSort() { //for directed graph
         int[][] incident = new int[vertices][vertices];
-
         for (int i = 0; i < vertices; i++) {
             for (int j = 0; j < vertices; j++) {
                 incident[i][j] = adjMatrix[i][j];
@@ -30,50 +29,40 @@ public class GraphImplementation implements Graph {
         //update indices array from adjMatrix
         //pick the vertex with incident = 0
 
-        Set<Integer> visited = new HashSet<Integer>(); // all false at the start
-        List<Integer> values = new ArrayList<>();
-
+        List<Integer> visited = new ArrayList<>(); // visited vertices - all false at the start
         boolean flag; //tell us if the vertex has been used
-
+        List<Integer> stored = new ArrayList<>(); // stored value
         for (int f = 0; f < vertices; f++) {
             for (int i = 0; i < vertices; i++) {
                 flag = true;
-
                 for (int j = 0; j < vertices; j++) {
                     if (incident[j][i] > 0) {
-                        flag = false;
+                        flag = false; // we already have visited this vertex
                         break;
                     }
                 }
-
                 if (flag && !visited.contains(i)) {
-                    visited.add(i);
-                    values.add(i);
-
+                    visited.add(i);// add to visited list
+                    stored.add(i); //add to sorted list
                     for (int k = 0; k < vertices; k++) {
-                        incident[i][k] = 0;
+                        incident[i][k] = 0; //set the vertex weight equal to 0
                     }
-
                     break;
                 }
             }
         }
-
-        return values;
+        return stored;// return the sorted vertices
     }
 
     public int[] neighbors(int vertex) {
         int count = 0;
         int neighborCount = 0;
-
         for (int i = 0; i < vertices; i++) {
             if (adjMatrix[vertex][i] > 0) {
-                count++;
+                count++; // increment # of vertices greater than 0
             }
         }
-
         int[] neighbors = new int[count];
-
         for (int i = 0; i < vertices; i++) {
             if (adjMatrix[vertex][i] > 0) {
                 neighbors[neighborCount++] = i;
